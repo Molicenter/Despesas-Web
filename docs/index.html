@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0B3D63">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Despesas Complementares · Molicenter</title>
+  <link rel="icon" href="logo.png">
+  <script>
+    try { var t = localStorage.getItem("desp_web_tema"); if (t === "dark" || t === "light") document.documentElement.dataset.theme = t; } catch (e) {}
+    try { if (localStorage.getItem("desp_web_menu") === "fechado") document.documentElement.classList.add("menu-fechado"); } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="style.css?v=1.0.0">
+</head>
+<body>
+  <section id="tela-login" class="tela-login" hidden>
+    <form id="form-login" class="login-cartao" autocomplete="off">
+      <div class="marca">
+        <img class="marca-selo" src="logo.png" alt="Passarinho Molicenter">
+        <div><h1>Despesas Complementares</h1><p>Molicenter</p></div>
+      </div>
+      <label class="campo"><span>Usuário</span><select id="login-usuario"></select></label>
+      <label class="campo"><span>Senha</span>
+        <input id="login-senha" type="text" class="senha" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-form-type="other">
+      </label>
+      <p id="login-erro" class="erro" hidden></p>
+      <button class="btn btn-primario btn-bloco" type="submit" id="btn-entrar">Entrar</button>
+      <p class="versao" id="versao-login"></p>
+    </form>
+  </section>
+
+  <div id="app" class="app" hidden>
+    <aside class="lateral">
+      <div class="marca">
+        <img class="marca-selo" src="logo.png" alt="Passarinho Molicenter">
+        <div><h1>Molicenter</h1><p>Despesas Complementares</p></div>
+      </div>
+      <nav class="nav" id="nav"></nav>
+      <div class="conta">
+        <strong id="conta-nome"></strong>
+        <small id="conta-perfil"></small>
+        <button class="btn" id="btn-sair" type="button">Sair</button>
+      </div>
+    </aside>
+    <div class="principal">
+      <header class="topo">
+        <button class="btn-menu" id="btn-menu" type="button" aria-label="Mostrar ou esconder o menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="topo-titulo"><h2 id="pg-titulo"></h2><p id="pg-sub"></p></div>
+        <div class="pilulas">
+          <span class="pilula" id="pil-loja"></span>
+          <span class="pilula magenta num" id="pil-data"></span>
+          <button class="pilula botao-tema" id="btn-tema" type="button" aria-label="Trocar tema claro/escuro">
+            <svg class="ic-lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+            <svg class="ic-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+            <span id="txt-tema">Escuro</span>
+          </button>
+        </div>
+      </header>
+      <main class="conteudo" id="conteudo"></main>
+      <footer class="rodape">Molicenter Supermercados © 2026 — Despesas Complementares</footer>
+    </div>
+  </div>
+
+  <div class="veu veu-janela" id="veu-janela" hidden></div>
+  <div class="janela" id="janela" role="dialog" aria-modal="true" hidden></div>
+  <div class="so-impressao" id="impressao"></div>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <div class="carregando" id="carregando" hidden><div class="spinner"></div></div>
+
+  <script src="config.js?v=1.0.0"></script>
+  <script src="app.js?v=1.0.0"></script>
+</body>
+</html>
