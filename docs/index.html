@@ -7,6 +7,11 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Despesas Complementares · Molicenter</title>
   <link rel="icon" href="logo.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icone-apple-180.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Despesas">
   <script>
     try { var t = localStorage.getItem("desp_web_tema"); if (t === "dark" || t === "light") document.documentElement.dataset.theme = t; } catch (e) {}
     try { if (localStorage.getItem("desp_web_menu") === "fechado") document.documentElement.classList.add("menu-fechado"); } catch (e) {}
@@ -72,5 +77,8 @@
 
   <script src="config.js?v=1.0.0"></script>
   <script src="app.js?v=1.0.0"></script>
+  <script>
+    if ("serviceWorker" in navigator) window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });
+  </script>
 </body>
 </html>
