@@ -2,7 +2,6 @@
   "name": "Despesas Complementares · Molicenter",
   "short_name": "Despesas",
   "description": "Lançamento e aprovação de despesas complementares",
-  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
