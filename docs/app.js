@@ -9,6 +9,13 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 const p2 = (n) => String(n).padStart(2, "0");
 const brl = (v) => "R$ " + Number(v || 0).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const nomeLoja = (l) => `Loja ${p2(l)}`;
+const brParaISO = (txt) => { const m = String(txt).trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/); if (!m) return null; const [, d, mo, a] = m; const dt = new Date(+a, +mo - 1, +d); return dt.getFullYear() === +a && dt.getMonth() === +mo - 1 && dt.getDate() === +d ? `${a}-${mo}-${d}` : null; };
+const ligarDataBR = (raiz) => raiz.querySelectorAll(".data-br").forEach((w) => {
+  const txt = w.querySelector('input[type="text"]'), nat = w.querySelector(".data-br-nativo");
+  txt.addEventListener("input", () => { const n = txt.value.replace(/\D/g, "").slice(0, 8); txt.value = n.length > 4 ? `${n.slice(0, 2)}/${n.slice(2, 4)}/${n.slice(4)}` : n.length > 2 ? `${n.slice(0, 2)}/${n.slice(2)}` : n; const iso = brParaISO(txt.value); if (iso) nat.value = iso; });
+  w.querySelector(".data-br-btn").addEventListener("click", () => { const iso = brParaISO(txt.value); if (iso) nat.value = iso; try { nat.showPicker(); } catch { nat.focus(); nat.click(); } });
+  nat.addEventListener("change", () => { if (nat.value) txt.value = dataBR(nat.value); });
+});
 const dataBR = (iso) => { if (!iso) return "-"; const [a, m, d] = String(iso).slice(0, 10).split("-"); return d ? `${d}/${m}/${a}` : iso; };
 const carimbo = (iso) => (iso ? new Date(iso).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }).replace(",", "") : "-");
 const hojeISO = () => new Date().toLocaleDateString("en-CA", { timeZone: "America/Sao_Paulo" });
@@ -158,7 +165,7 @@ function telaLoja() {
   let h = `<div class="pagina"><div class="cartao"><h3>Nova despesa</h3>
     <form id="form-desp" class="form-desp" autocomplete="off">
       <label class="campo cheio-2"><span>Nome completo do colaborador *</span><input name="nome" maxlength="120" required style="text-transform:uppercase"></label>
-      <label class="campo"><span>Data trabalhada *</span><input name="data" type="date" value="${hojeISO()}" required></label>
+      <div class="campo"><span>Data trabalhada *</span><div class="data-br"><input name="data" type="text" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" value="${dataBR(hojeISO())}" required><button type="button" class="data-br-btn" title="Abrir calendário" aria-label="Abrir calendário"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></button><input type="date" class="data-br-nativo" tabindex="-1" aria-hidden="true" value="${hojeISO()}"></div></div>
       <label class="campo"><span>Motivo *</span><select name="motivo">${opc(dados.motivos)}</select></label>
       <label class="campo"><span>Departamento *</span><select name="depto">${opc(dados.deptos)}</select></label>
       <label class="campo"><span>Valor (R$) *</span><input name="valor" type="text" inputmode="decimal" placeholder="0,00" required></label>
@@ -174,15 +181,18 @@ function telaLoja() {
     ${regs.length ? tabelaRegistros(regs, { selecao: true, loja: false }) : '<p class="vazio-msg">Nenhum registro encontrado para a sua loja até o momento.</p>'}</div></div>`;
   $("#conteudo").innerHTML = h;
 
+  ligarDataBR($("#form-desp"));
   $("#form-desp").onsubmit = async (e) => {
     e.preventDefault();
     const f = e.target;
     const valor = Number(String(f.valor.value).replace(/\./g, "").replace(",", ".").replace(/[^\d.]/g, ""));
     if (!f.nome.value.trim()) return toast(MENSAGENS.NOME_VAZIO, "erro");
     if (!(valor > 0)) return toast(MENSAGENS.VALOR_INVALIDO, "erro");
+    const dataISO = brParaISO(f.data.value);
+    if (!dataISO) return toast("Data inválida. Use o formato dd/mm/aaaa.", "erro");
     const b = $("#btn-registrar"); b.disabled = true; b.textContent = "Enviando…";
     try {
-      await rpc("desp_web_lancar", { p_token: sessao.token, p: { nome: f.nome.value, motivo: f.motivo.value, depto: f.depto.value, data: f.data.value, valor, obs: f.obs.value } });
+      await rpc("desp_web_lancar", { p_token: sessao.token, p: { nome: f.nome.value, motivo: f.motivo.value, depto: f.depto.value, data: dataISO, valor, obs: f.obs.value } });
       toast("Despesa registrada com sucesso!", "ok");
       await carregar();
       $('#form-desp [name="nome"]')?.focus();

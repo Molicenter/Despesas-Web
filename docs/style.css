@@ -513,3 +513,10 @@ table.resumo tr.total.escuro td { background: var(--dono-a); color: #fff; }
   .so-impressao table.resumo th, .so-impressao table.resumo td { text-align: center; font-size: 9px; }
   .so-impressao table.resumo tr.total td { font-weight: 800; background: #0B3D63 !important; color: #fff !important; }
 }
+
+/* Campo de data no formato brasileiro (dd/mm/aaaa) */
+.data-br { position: relative; }
+.campo .data-br input[type="text"] { padding-right: 42px; }
+.data-br-btn { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 34px; height: 32px; display: grid; place-items: center; border: 0; border-radius: 8px; background: transparent; color: var(--texto-suave); cursor: pointer; }
+.data-br-btn:hover { background: var(--superficie-2); color: var(--texto); }
+.campo .data-br-nativo { position: absolute; right: 0; bottom: 0; width: 1px; height: 1px; min-height: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; }
